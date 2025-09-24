@@ -22,12 +22,11 @@ FlexiFit Gym wants a database to manage its members, trainers, and fitness progr
 - Payments tracked for memberships and sessions.
 
 ### ER Diagram:
-*Paste or attach your diagram here*  
-![ER Diagram](er_diagram_fitness.png)
+[ER DIAGRAM.pdf](https://github.com/user-attachments/files/22511248/ER.DIAGRAM.pdf)
 
 ### Entities and Attributes
 
-| Entity | Attributes (PK, FK) | Notes |
+| Entity | Attributes (PK, FK)| Notes |
 |--------|--------------------|-------|
 |        |                    |       |
 |        |                    |       |
@@ -37,7 +36,7 @@ FlexiFit Gym wants a database to manage its members, trainers, and fitness progr
 
 ### Relationships and Constraints
 
-| Relationship | Cardinality | Participation | Notes |
+| Relationship | Cardinality| Participation | Notes |
 |--------------|------------|---------------|-------|
 |              |            |               |       |
 |              |            |               |       |
@@ -79,7 +78,7 @@ The Central Library wants to manage book lending and cultural events.
 
 ### Relationships and Constraints
 
-| Relationship | Cardinality | Participation | Notes |
+| Relationship | Cardinality| Participation | Notes |
 |--------------|------------|---------------|-------|
 |              |            |               |       |
 |              |            |               |       |
@@ -111,7 +110,7 @@ A popular restaurant wants to manage reservations, orders, and billing.
 
 ### Entities and Attributes
 
-| Entity | Attributes (PK, FK) | Notes |
+| Entity | Attributes (PK, FK)| Notes |
 |--------|--------------------|-------|
 |        |                    |       |
 |        |                    |       |
@@ -121,7 +120,7 @@ A popular restaurant wants to manage reservations, orders, and billing.
 
 ### Relationships and Constraints
 
-| Relationship | Cardinality | Participation | Notes |
+| Relationship | Cardinality| Participation | Notes |
 |--------------|------------|---------------|-------|
 |              |            |               |       |
 |              |            |               |       |
