@@ -1,217 +1,214 @@
-# Experiment 5: Subqueries and Views
+# Experiment 6: Joins
 
 ## AIM
-To study and implement subqueries and views.
+To study and implement different types of joins.
 
 ## THEORY
 
-### Subqueries
-A subquery is a query inside another SQL query and is embedded in:
-- WHERE clause
-- HAVING clause
-- FROM clause
+SQL Joins are used to combine records from two or more tables based on a related column.
 
-**Types:**
-- **Single-row subquery**:
-  Sub queries can also return more than one value. Such results should be made use along with the operators in and any.
-- **Multiple-row subquery**:
-  Here more than one subquery is used. These multiple sub queries are combined by means of ‘and’ & ‘or’ keywords.
-- **Correlated subquery**:
-  A subquery is evaluated once for the entire parent statement whereas a correlated Sub query is evaluated once per row processed by the parent statement.
+### 1. INNER JOIN
+Returns records with matching values in both tables.
 
-**Example:**
+**Syntax:**
 ```sql
-SELECT * FROM employees
-WHERE salary > (SELECT AVG(salary) FROM employees);
+SELECT columns
+FROM table1
+INNER JOIN table2
+ON table1.column = table2.column;
 ```
-### Views
-A view is a virtual table based on the result of an SQL SELECT query.
-**Create View:**
+
+### 2. LEFT JOIN
+Returns all records from the left table, and matched records from the right.
+
+**Syntax:**
+
 ```sql
-CREATE VIEW view_name AS
-SELECT column1, column2 FROM table_name WHERE condition;
+SELECT columns
+FROM table1
+LEFT JOIN table2
+ON table1.column = table2.column;
 ```
-**Drop View:**
+### 3. RIGHT JOIN
+Returns all records from the right table, and matched records from the left.
+
+**Syntax:**
+
 ```sql
-DROP VIEW view_name;
+SELECT columns
+FROM table1
+RIGHT JOIN table2
+ON table1.column = table2.column;
+```
+### 4. FULL OUTER JOIN
+Returns all records when there is a match in either left or right table.
+
+**Syntax:**
+
+```sql
+SELECT columns
+FROM table1
+FULL OUTER JOIN table2
+ON table1.column = table2.column;
 ```
 
 **Question 1**
 --
-<img width="1068" height="370" alt="image" src="https://github.com/user-attachments/assets/ddffe3a5-7eec-4935-9bd8-b7dfdb154e0d" />
+ From the following tables write a SQL query to find salespeople who received commissions of more than 12 percent from the company. Return Customer Name, customer city, Salesman, commission.  
+
 
 ```sql
-SELECT *
-FROM CUSTOMERS
-WHERE SALARY > 1500;
+select c.cust_name as 'Customer Name',c.city,s.name as Salesman, s.commission
+from customer c
+join salesman s on c.salesman_id=s.salesman_id
+where s.commission>0.12;
 ```
 
 **Output:**
 
-<img width="1161" height="529" alt="image" src="https://github.com/user-attachments/assets/fccb709b-8fd7-4acc-a70e-f5e2e398a7cb" />
+<img width="1110" height="679" alt="image" src="https://github.com/user-attachments/assets/d405f6c3-f85b-4c4b-96d2-57962885cd07" />
 
 **Question 2**
 ---
-<img width="1233" height="382" alt="image" src="https://github.com/user-attachments/assets/1e497635-92f2-4f5d-9113-e7c8ab286ef4" />
+From the following tables write a SQL query to find those orders where the order amount exists between 500 and 2000. Return ord_no, purch_amt, cust_name, city.
+
 
 ```sql
-SELECT *
-FROM CUSTOMERS
-WHERE SALARY = 1500;
+select o.ord_no,o.purch_amt,c.cust_name,c.city
+from customer c
+join orders o on c.salesman_id=o.salesman_id
+where o.purch_amt between 500 and 2000
+group by o.ord_no ;
 ```
+
 
 **Output:**
 
-<img width="1221" height="297" alt="image" src="https://github.com/user-attachments/assets/319e4e0a-4dd4-4750-8e52-12bd8de7ec65" />
+<img width="1130" height="453" alt="image" src="https://github.com/user-attachments/assets/069f382c-fd83-4c91-8362-81f03921fdd4" />
 
 **Question 3**
 ---
-<img width="1268" height="320" alt="image" src="https://github.com/user-attachments/assets/60d8b17f-7b89-4119-846c-7c719971b68d" />
+From the following tables write a SQL query to find the details of an order. Return ord_no, ord_date, purch_amt, Customer Name, grade, Salesman, commission. 
+
 
 ```sql
-SELECT ord_no, purch_amt, ord_date, customer_id, salesman_id
-FROM orders
-WHERE purch_amt > (
-    SELECT AVG(purch_amt)
-    FROM orders
-    WHERE ord_date = '2012-10-10'
-);
+select o.ord_no,o.ord_date,o.purch_amt,c.cust_name as 'Customer Name',c.grade,s.name as 'Salesman',s.commission
+from customer c
+join orders o on c.customer_id=o.customer_id
+join salesman s on c.salesman_id=s.salesman_id;
 ```
 
 **Output:**
 
-<img width="1127" height="393" alt="image" src="https://github.com/user-attachments/assets/dc772528-0a50-43dd-8136-31e188223be2" />
+<img width="1066" height="648" alt="image" src="https://github.com/user-attachments/assets/90a3f61c-7cbb-408a-ab9e-43cc26adaa8c" />
 
 **Question 4**
 ---
-<img width="1314" height="447" alt="image" src="https://github.com/user-attachments/assets/7920a2ad-8d7c-4fd0-976f-d43a6fbaa934" />
+Write the SQL query that achieves the selection of the "name" column from the "salesman" table (aliased as "s"), with a left join on the "salesman_id" column and a condition filtering for customers in the city 'New York'.
+
 
 ```sql
-SELECT o.ord_no, o.purch_amt, o.ord_date, o.customer_id, o.salesman_id
-FROM orders o
-JOIN salesman s
-ON o.salesman_id = s.salesman_id
-WHERE s.city = 'New York';
-
+select s.name from customer c
+left join salesman s on c.salesman_id=s.salesman_id
+where c.city='New York';
 ```
 
 **Output:**
 
-<img width="1133" height="391" alt="image" src="https://github.com/user-attachments/assets/fa6f01ee-5856-4075-ba14-41003c73168d" />
+<img width="259" height="237" alt="image" src="https://github.com/user-attachments/assets/12944194-9431-4d89-84e5-65f257b28bd3" />
 
 **Question 5**
 ---
-<img width="1174" height="448" alt="image" src="https://github.com/user-attachments/assets/49e908f3-843d-4626-bd0f-a6a71d6551ed" />
+write a SQL query to find the salesperson and customer who reside in the same city. Return Salesman, cust_name and city.
+
 
 ```sql
-SELECT customer_id, cust_name, city, grade, salesman_id
-FROM customer
-WHERE customer_id = (
-    (SELECT salesman_id FROM salesman WHERE name = 'Mc Lyon') - 2001
-);
+select s.name as 'Salesman',c.cust_name,c.city from customer c
+join salesman s on c.city=s.city
+order by s.salesman_id;
 ```
 
 **Output:**
 
-<img width="1167" height="262" alt="image" src="https://github.com/user-attachments/assets/b8dc617a-5044-4702-89f0-899bec1c1e2f" />
+<img width="847" height="558" alt="image" src="https://github.com/user-attachments/assets/9c47906e-7f2a-4888-99b9-437184607cc2" />
 
 **Question 6**
 ---
-<img width="1270" height="456" alt="image" src="https://github.com/user-attachments/assets/2c7f2639-4d25-4451-a97a-fd0fdacf5497" />
+Write the SQL query that achieves the selection of the "name" column from the "salesman" table (aliased as "s"), the "cust_name," "city," "grade," and "salesman_id" columns from the "customer" table (aliased as "c"), with a left join on the "salesman_id" column and a condition filtering for customers with a grade less than or equal to 100.
+
 
 ```sql
-SELECT o.ord_no, o.purch_amt, o.ord_date, o.salesman_id
-FROM orders o
-JOIN salesman s
-ON o.salesman_id = s.salesman_id
-WHERE s.commission = (
-    SELECT MAX(commission)
-    FROM salesman
-);
+select s.name,c.cust_name,c.city,c.grade,c.salesman_id from customer c
+left join salesman s on c.salesman_id=s.salesman_id
+where c.grade<=100;
 ```
 
 **Output:**
 
-<img width="923" height="413" alt="image" src="https://github.com/user-attachments/assets/187e48e4-1e0d-4a25-b405-4ef05908b152" />
+<img width="1262" height="476" alt="image" src="https://github.com/user-attachments/assets/2cbd205f-51a9-4306-941e-19b92e514b0b" />
 
 **Question 7**
 ---
-<img width="1018" height="308" alt="image" src="https://github.com/user-attachments/assets/7f3d34a0-aca9-4e74-89ab-489bfaba18e0" />
+Write the SQL query that accomplishes the selection of all columns from the "patients" table and the first name of doctors from the "doctors" table, with an inner join on the "doctor_id" column.
+
 
 ```sql
-SELECT id, name, age, city, income
-FROM Employee
-WHERE age < (
-    SELECT AVG(age)
-    FROM Employee
-    WHERE income > 1000000
-);
+select distinct p.*,d.first_name as 'doctor_name' from patients p
+inner join doctors d on p.doctor_id=d.doctor_id;
 ```
 
 **Output:**
 
-<img width="1325" height="381" alt="image" src="https://github.com/user-attachments/assets/b3a920ae-2729-4f82-bd86-57f323235776" />
+<img width="1289" height="489" alt="image" src="https://github.com/user-attachments/assets/e2565706-cb58-4f99-8d68-aab4a9f4ad4d" />
 
 **Question 8**
 ---
-<img width="1149" height="488" alt="image" src="https://github.com/user-attachments/assets/68d4befa-2ffb-4ca8-8143-1a2c96565210" />
+Write the SQL query that achieves the selection of the first name from the "patients" table, with an inner join on the "patient_id" column and a condition filtering for surgeries with a surgery date of '2024-01-15'.:
+
 
 ```sql
-SELECT name, city
-FROM customer
-WHERE city IN (
-    SELECT city
-    FROM customer
-    WHERE id IN (3,7)
-);
+select p.first_name from patients p
+inner join surgeries s on p.patient_id=s.patient_id
+where s.surgery_date='2024-01-15';
 ```
 
 **Output:**
 
-<img width="540" height="435" alt="image" src="https://github.com/user-attachments/assets/40973405-ab12-4231-81e9-be4ffc8b7460" />
+<img width="481" height="357" alt="image" src="https://github.com/user-attachments/assets/f6ba15f5-c88b-42c7-81f6-6919e23a6487" />
 
 **Question 9**
 ---
-<img width="1297" height="455" alt="image" src="https://github.com/user-attachments/assets/57340e2e-7eea-4694-a717-b754e5b893a1" />
+Write the SQL query that achieves the selection of all columns from the "nurses" table (aliased as "n"), with an inner join on the "department_id" column and a condition filtering for nurses in the 'Pediatrics' department.
+
 
 ```sql
-SELECT o.ord_no, o.purch_amt, o.ord_date, o.customer_id, o.salesman_id
-FROM orders o
-JOIN salesman s
-ON o.salesman_id = s.salesman_id
-WHERE s.name = 'Paul Adam';
+select distinct n.* from nurses n
+inner join departments d on n.department_id=d.department_id
+where d.department_name='Pediatrics';
 ```
 
 **Output:**
 
-<img width="1198" height="343" alt="image" src="https://github.com/user-attachments/assets/cbf6d069-2e71-4310-95f2-fc6b16431fee" />
+<img width="1038" height="344" alt="image" src="https://github.com/user-attachments/assets/f04a2c8e-a1d1-40a9-a7cf-cd49733093e3" />
 
 **Question 10**
 ---
-<img width="1237" height="552" alt="image" src="https://github.com/user-attachments/assets/5023b46a-0b89-43d6-bfe6-c6dee7f5266f" />
+ From the following tables write a SQL query to find the salesperson(s) and the customer(s) he represents. Return Customer Name, city, Salesman, commission.
+
 
 ```sql
-SELECT
-    o.ord_no,
-    o.purch_amt,
-    o.ord_date,
-    o.customer_id,
-    o.salesman_id
-FROM
-    ORDERS o
-INNER JOIN
-    SALESMAN s ON o.salesman_id = s.salesman_id
-WHERE
-    s.city='New York';
+select c.cust_name as 'Customer Name',c.city,s.name as 'Salesman',s.commission
+from customer c
+join salesman s on c.salesman_id=s.salesman_id;
 ```
 
 **Output:**
 
-<img width="1240" height="444" alt="image" src="https://github.com/user-attachments/assets/7d4bbd10-e0a4-4c2f-9031-2a1cb80d8139" />
+<img width="1043" height="747" alt="image" src="https://github.com/user-attachments/assets/05d2407c-1741-4eda-a48b-446a98f4ee2e" />
 
 ## Grade
-<img width="1370" height="67" alt="image" src="https://github.com/user-attachments/assets/eb4f358a-1226-4fb7-b8dc-a0dc4b5ffe5e" />
+<img width="1390" height="79" alt="image" src="https://github.com/user-attachments/assets/39c3a756-43c9-4a6f-b2fc-88bb14c9d43f" />
 
 
 ## RESULT
-Thus, the SQL queries to implement subqueries and views have been executed successfully.
+Thus, the SQL queries to implement different types of joins have been executed successfully.
